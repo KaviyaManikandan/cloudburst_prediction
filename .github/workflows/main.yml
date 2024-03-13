@@ -37,6 +37,30 @@ jobs:
       - name: Push Docker image to Amazon ECR
         run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/app-repoo:latest
 
-  get-url:
-   
-          cat load_balancer_url.txt
+  terraform:
+    name: Apply Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Apply Terraform
+        run: terraform apply -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET }}
+          AWS_DEFAULT_REGION: "us-east-1" # Replace with your AWS region
+
+      - name: Output Load Balancer URL
+        run: terraform output app_url > load_balancer_url.txt
+
+      - name: Show Load Balancer URL
+        run: cat load_balancer_url.txt
