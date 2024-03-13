@@ -1,9 +1,13 @@
-name: Build and Push Docker Image
+name: Build Docker Image and Get Load Balancer URL
 
 on:
   push:
     branches:
       - main
+  workflow_run:
+    workflows: ["Terraform Apply"]
+    types:
+      - completed
 
 jobs:
   build-and-push:
@@ -32,3 +36,25 @@ jobs:
 
       - name: Push Docker image to Amazon ECR
         run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/app-repoo:latest
+
+  get-url:
+    name: Get Load Balancer URL
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET }}
+          AWS_DEFAULT_REGION: us-east-1
+
+      - name: Retrieve Load Balancer URL
+        run: |
+          terraform output -json alb_dns_name | jq -r '.value' > load_balancer_url.txt
+          cat load_balancer_url.txt
