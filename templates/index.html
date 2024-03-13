@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Burst Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" type="images/x-icon" href="https://icons8.com/icon/39456/rain-cloud" />
+    <!-- https://icons8.com/icon/39456/rain-cloud -->
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+        body {
+            font-family: 'Poppins'; 
+            background: linear-gradient(135deg, #1c1c1c, #333);
+            font-family: Arial, sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .card h1 {
+            margin-bottom: 20px;
+        }
+        .card form {
+            margin-bottom: 20px;
+        }
+        .card form input[type="text"] {
+            width: 95%;
+            padding: 10px;
+            border-radius: 20px;
+            margin-bottom:10px;
+            border: none;
+            outline: none;
+        }
+        .card form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            background-color: blue;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .card form input[type="submit"]:hover {
+            background-color: #27ae60;
+        }
+        .weather-data p {
+            margin-bottom: 10px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="card">
+        <h1><i class="fas fa-cloud-sun"></i> Cloud Burst Prediction</h1>
+        <form action="/predict" method="post">
+            <input type="text" id="city_name" name="city_name" placeholder="Enter City Name">
+            <input type="submit" value="Predict">
+        </form>
+        <div class="weather-data">
+            {% if weather_data %}
+            <h2>Weather Data for {{ city_name }}</h2>
+            <p><i class="fas fa-thermometer-half"></i> Temperature (Min): {{ weather_data.forecast.forecastday[0].day.mintemp_c }}°C</p>
+            <p><i class="fas fa-thermometer-full"></i> Temperature (Max): {{ weather_data.forecast.forecastday[0].day.maxtemp_c }}°C</p>
+            <p><i class="fas fa-cloud-showers-heavy"></i> Rain: {{ weather_data.current.precip_mm }} mm</p>
+            <p><i class="fas fa-tint"></i> Humidity: {{ weather_data.current.humidity }}%</p>
+            <p><i class="fas fa-tachometer-alt"></i> Pressure: {{ weather_data.current.pressure_mb }} hPa</p>
+            <p><i class="fas fa-wind"></i> Wind Speed: {{ weather_data.current.wind_kph }} km/h</p>
+            <p><i class="fas fa-cloud"></i> Cloud: {{ weather_data.current.cloud }}%</p>
+            {% endif %}
+        </div>
+        {% if prediction_text %}
+        <h2>Prediction: {{ prediction_text }}</h2>
+        {% endif %}
+    </div>
+</body>
+</html>
