@@ -21,22 +21,22 @@ resource "aws_ecs_task_definition" "app_task" {
     }
   ]
   DEFINITION
-  requires_compatibilities = ["FARGATE"] # use Fargate as the launch type
-  network_mode             = "awsvpc"    # add the AWS VPN network mode as this is required for Fargate
-  memory                   = 512         # Specify the memory the container requires
-  cpu                      = 256         # Specify the CPU the container requires
+  requires_compatibilities = ["FARGATE"] 
+  network_mode             = "awsvpc"   
+  memory                   = 512        
+  cpu                      = 256         
   execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
 }
 
 resource "aws_ecs_service" "app_service" {
   name            = "app-first-servicee"     # Name the service
-  cluster         = "${aws_ecs_cluster.my_cluster.id}"   # Reference the created Cluster
-  task_definition = "${aws_ecs_task_definition.app_task.arn}" # Reference the task that the service will spin up
+  cluster         = "${aws_ecs_cluster.my_cluster.id}"   
+  task_definition = "${aws_ecs_task_definition.app_task.arn}" 
   launch_type     = "FARGATE"
   desired_count   = 3 # Set up the number of containers to 3
 
   load_balancer {
-    target_group_arn = "${aws_lb_target_group.target_group.arn}" # Reference the target group
+    target_group_arn = "${aws_lb_target_group.target_group.arn}" 
     container_name   = "${aws_ecs_task_definition.app_task.family}"
     container_port   = 5000 # Specify the container port
   }
