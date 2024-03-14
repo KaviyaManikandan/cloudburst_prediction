@@ -1,8 +1,7 @@
-# main.tf
 resource "aws_ecs_cluster" "my_cluster" {
   name = "app-clusterr" # Name your cluster here
 }
-# main.tf
+
 resource "aws_ecs_task_definition" "app_task" {
   family                   = "app-first-taskk" # Name your task
   container_definitions    = <<DEFINITION
@@ -28,7 +27,7 @@ resource "aws_ecs_task_definition" "app_task" {
   cpu                      = 256         # Specify the CPU the container requires
   execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
 }
-# main.tf
+
 resource "aws_ecs_service" "app_service" {
   name            = "app-first-servicee"     # Name the service
   cluster         = "${aws_ecs_cluster.my_cluster.id}"   # Reference the created Cluster
@@ -48,7 +47,7 @@ resource "aws_ecs_service" "app_service" {
     security_groups  = ["${aws_security_group.service_security_group.id}"] # Set up the security group
   }
 }
-# main.tf
+
 resource "aws_security_group" "service_security_group" {
   ingress {
     from_port = 0
