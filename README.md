@@ -17,7 +17,7 @@ Before you begin, make sure you have the following:
    - Clone this repository to your local machine:
      ```bash
      git clone https://github.com/your-username/cloudprediction.git
-     cd cloudprediction
+     cd cloudburst_prediction
      ```
 
 2. **AWS Credentials:**
