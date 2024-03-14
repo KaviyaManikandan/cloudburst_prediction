@@ -2,6 +2,7 @@
 
 Welcome to the Cloudburst Prediction project! This guide will walk you through the setup process to deploy your prediction model on AWS using Terraform.
 
+
 ## Prerequisites
 
 Before you begin, make sure you have the following:
