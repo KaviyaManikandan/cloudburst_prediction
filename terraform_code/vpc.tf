@@ -1,4 +1,3 @@
-# main.tf
 # Provide a reference to your default VPC
 resource "aws_default_vpc" "default_vpc" {
 }
