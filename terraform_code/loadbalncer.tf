@@ -1,4 +1,3 @@
-# main.tf
 resource "aws_alb" "application_load_balancer" {
   name               = "load-balancer-dev" #load balancer name
   load_balancer_type = "application"
@@ -9,7 +8,7 @@ resource "aws_alb" "application_load_balancer" {
   # security group
   security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
 }
-# main.tf
+
 # Create a security group for the load balancer:
 resource "aws_security_group" "load_balancer_security_group" {
   ingress {
@@ -27,7 +26,6 @@ resource "aws_security_group" "load_balancer_security_group" {
   }
 }
 
-# main.tf
 resource "aws_lb_target_group" "target_group" {
   name        = "target-group"
   port        = 80
