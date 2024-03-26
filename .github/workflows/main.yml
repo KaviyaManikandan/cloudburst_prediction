@@ -40,7 +40,7 @@ jobs:
       # Run Terraform commands
       - name: Execute Terraform
         run: |
-          cd /path/to/terraform/directory
+          cd terraform_code
           terraform init
           terraform plan -out=tfplan
           terraform apply tfplan
