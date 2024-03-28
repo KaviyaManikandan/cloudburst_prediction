@@ -25,19 +25,19 @@ resource "aws_ecs_task_definition" "app_task" {
   network_mode             = "awsvpc"   
   memory                   = 512        
   cpu                      = 256         
-  execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
+  execution_role_arn       = "${data.aws_iam_role.existing_ecsTaskExecutionRole.arn}"
 }
 
 resource "aws_ecs_service" "app_service" {
   name            = "app-first-servicee"     # Name the service
   cluster         = "${aws_ecs_cluster.my_cluster.id}"   
-  task_definition = "${aws_ecs_task_definition.app_task.arn}" 
+  task_definition = "${data.aws_iam_role.existing_ecsTaskExecutionRole.arn}" 
   launch_type     = "FARGATE"
   desired_count   = 3 # Set up the number of containers to 3
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.target_group.arn}" 
-    container_name   = "${aws_ecs_task_definition.app_task.family}"
+    container_name   = "${data.aws_iam_role.existing_ecsTaskExecutionRole.family}"
     container_port   = 5000 # Specify the container port
   }
 
