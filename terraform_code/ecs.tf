@@ -1,7 +1,3 @@
-resource "aws_ecs_cluster" "my_cluster" {
-  name = "app-clusterr" # Name your cluster here
-}
-
 resource "aws_ecs_task_definition" "app_task" {
   family                   = "app-first-taskk" # Name your task
   container_definitions    = <<DEFINITION
@@ -25,7 +21,7 @@ resource "aws_ecs_task_definition" "app_task" {
   network_mode             = "awsvpc"   
   memory                   = 512        
   cpu                      = 256         
-  execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
+  execution_role_arn       = "arn:aws:ecs:us-east-1:590183704936:task-definition/app-first-taskk:1"
 }
 
 resource "aws_ecs_service" "app_service" {
@@ -48,24 +44,6 @@ resource "aws_ecs_service" "app_service" {
   }
 }
 
-resource "aws_security_group" "service_security_group" {
-  ingress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-    # Only allowing traffic in from the load balancer security group
-    security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-# main.tf
-#Log the load balancer app URL
 output "app_url" {
   value = aws_alb.application_load_balancer.dns_name
 }
