@@ -25,6 +25,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET }}
           aws-region: us-east-1
 
+          
+                  # Run Terraform commands
+      - name: Execute Terraform
+        run: |
+          cd terraform_code
+          terraform init
+          terraform plan -out=tfplan
+          terraform apply tfplan
+
 
       - name: Login to Amazon ECR
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
@@ -38,11 +47,4 @@ jobs:
       - name: Push Docker image to Amazon ECR
         run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/app-repoo:latest
 
-                  # Run Terraform commands
-      - name: Execute Terraform
-        run: |
-          cd terraform_code
-          terraform init
-          terraform plan -out=tfplan
-          terraform apply tfplan
 
